@@ -106,12 +106,12 @@ export default function Portfolio() {
           <Image
             src={profilePic}
             alt="Profile"
-            width={192} // md:w-48
-            height={192} // md:h-48
+            width={192}
+            height={192}
             className="rounded-full mx-auto mb-4 mt-4 border-2 border-white shadow-lg"
           />
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
-            Hi, I'm <span className="text-blue-600">Nabil</span>
+            Hi, I&apos;m <span className="text-blue-600">Nabil</span>
           </h1>
           <p className="text-lg md:text-xl text-gray-600 mb-3">
             AI & IoT Engineer
@@ -133,24 +133,6 @@ export default function Portfolio() {
             <Mail className="w-5 h-5" />
           </a>
         </div>
-
-        {/* Stats Section
-        <div className="w-full max-w-2xl px-4 mb-6">
-          <div className="grid grid-cols-3 gap-3 md:gap-4">
-            <div className="bg-white p-3 md:p-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 text-center">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1">3+ Years</h3>
-              <p className="text-xs md:text-sm text-gray-600">Experience</p>
-            </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 text-center">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1">50+ Projects</h3>
-              <p className="text-xs md:text-sm text-gray-600">Completed</p>
-            </div>
-            <div className="bg-white p-3 md:p-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 text-center">
-              <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1">15+ Clients</h3>
-              <p className="text-xs md:text-sm text-gray-600">Satisfied</p>
-            </div>
-          </div>
-        </div> */}
 
         {/* CTA Button */}
         <button
@@ -177,9 +159,11 @@ export default function Portfolio() {
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
           {projects.map((project) => (
             <div key={project.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <img
+              <Image
                 src={project.image}
                 alt={project.title}
+                width={400}
+                height={250}
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
@@ -234,9 +218,11 @@ export default function Portfolio() {
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
           {certificates.map((cert) => (
             <div key={cert.id} className="bg-gray-50 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:scale-105">
-              <img
+              <Image
                 src={cert.image}
                 alt={cert.title}
+                width={300}
+                height={200}
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
