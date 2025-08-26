@@ -123,10 +123,10 @@ export default function Portfolio() {
 
         {/* Social Links */}
         <div className="flex space-x-4 mb-6">
-          <a href="https://github.com/nabilsaragih" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-110 shadow-lg">
+          <a href="https://github.com/nabilsaragih" target="_blank" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-110 shadow-lg">
             <Github className="w-5 h-5" />
           </a>
-          <a href="https://www.linkedin.com/in/nabilsaragih/" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-110 shadow-lg">
+          <a href="https://www.linkedin.com/in/nabilsaragih/" target="_blank" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-110 shadow-lg">
             <Linkedin className="w-5 h-5" />
           </a>
           <a href="mailto:mnabilsaragih@gmail.com" className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-300 hover:scale-110 shadow-lg">
