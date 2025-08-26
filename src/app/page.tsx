@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react';
+import Image from "next/image";
 import { ChevronDown, Github, Linkedin, Mail, ExternalLink, Award, Calendar, User, Briefcase, FileText } from 'lucide-react';
 import profilePic from '../assets/profile.jpg';
 
@@ -102,10 +103,12 @@ export default function Portfolio() {
       <div className="flex-1 flex flex-col justify-center items-center px-4 md:px-8 py-4">
         {/* Profile Section */}
         <div className="text-center mb-6">
-          <img
-            src={profilePic.src}
+          <Image
+            src={profilePic}
             alt="Profile"
-            className="w-40 h-40 md:w-48 md:h-48 rounded-full mx-auto mb-4 mt-4 border-2 border-white shadow-lg"
+            width={192} // md:w-48
+            height={192} // md:h-48
+            className="rounded-full mx-auto mb-4 mt-4 border-2 border-white shadow-lg"
           />
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
             Hi, I'm <span className="text-blue-600">Nabil</span>
