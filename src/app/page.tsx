@@ -5,7 +5,7 @@ import {
   User, Briefcase, FileText, Menu, Moon, Sun, Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef, type ReactNode } from 'react';
 import profilePic from '../assets/profile.jpg';
 
 export default function Portfolio() {
@@ -61,17 +61,23 @@ export default function Portfolio() {
   useEffect(() => {
     let mounted = true;
     fetch('/api/posts', { cache: 'no-store' })
-      .then((r) => r.json())
+      .then((r) => r.json() as Promise<unknown>)
       .then((data) => {
         if (!mounted) return;
-        const mapped: BlogMeta[] = data.map((d: any) => ({
-          slug: d.slug,
-          title: d.title,
-          excerpt: d.excerpt,
-          date: d.date,
-          readTime: `${d.readingTimeMinutes} min read`,
-          tags: Array.isArray(d.tags) ? d.tags : [],
-        }));
+        const mapped: BlogMeta[] = Array.isArray(data)
+          ? data.map((d) => {
+              const obj = d as Record<string, unknown>;
+              const tags = Array.isArray(obj.tags) ? (obj.tags as unknown[]).map(String) : [];
+              return {
+                slug: String(obj.slug ?? ''),
+                title: String(obj.title ?? ''),
+                excerpt: String(obj.excerpt ?? ''),
+                date: String(obj.date ?? ''),
+                readTime: `${Number(obj.readingTimeMinutes ?? 0)} min read`,
+                tags,
+              };
+            })
+          : [];
         setBlogPosts(mapped);
       })
       .catch(() => {});
@@ -135,12 +141,12 @@ export default function Portfolio() {
   const fade = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.4 } } };
   const springy = { whileHover: { y: -4, scale: 1.01 }, whileTap: { scale: 0.98 } };
 
-  const Section = ({ children, className = '' }: any) => (
+  const Section = ({ children, className = '' }: { children: ReactNode; className?: string }) => (
     <motion.section variants={fade} initial="hidden" animate="show"
       className={`mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8 ${className}`}>{children}</motion.section>
   );
 
-  const Pill = ({ children, className = '' }: any) => (
+  const Pill = ({ children, className = '' }: { children: ReactNode; className?: string }) => (
     <span className={`inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-white/5 backdrop-blur px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-200 ${className}`}>{children}</span>
   );
 
