@@ -1,26 +1,91 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@source "../**/*.{ts,tsx,js,jsx,mdx,html}";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Ensure padding/borders do not cause overflow */
+*, ::before, ::after { box-sizing: border-box; }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Layout metrics */
+  --header-h: 4rem;       /* 64px */
+  --bottom-nav-h: 4rem;   /* 64px (mobile bottom bar) */
+  /* Safe area insets (iOS notch) */
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --bg: 255 255 255; /* #ffffff */
+  --fg: 23 23 23;    /* #171717 */
+  color-scheme: light;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  --bg: 10 10 10;    /* #0a0a0a */
+  --fg: 237 237 237; /* #ededed */
+  color-scheme: dark;
+}
+
+html { scroll-behavior: smooth; }
+/* Reserve gutter only on the scrollbar side to avoid visible side gaps under overlays */
+html { scrollbar-gutter: stable; }
+html, body { overflow-x: hidden; }
+html, body { -webkit-tap-highlight-color: transparent; }
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Navy palette (accessible, balanced) */
+  --color-navy-50:  #F2F6FC;
+  --color-navy-100: #E6EEFA;
+  --color-navy-200: #CAD9F2;
+  --color-navy-300: #A8BEE6;
+  --color-navy-400: #869FD4;
+  --color-navy-500: #627FC1;
+  --color-navy-600: #3E5BAF; /* primary */
+  --color-navy-650: #3654A3; /* deeper primary for buttons */
+  --color-navy-700: #2F478D;
+  --color-navy-800: #23366C;
+  --color-navy-900: #192851;
+  --color-navy-950: #101936;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply antialiased;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
 }
+
+/* Hide horizontal scrollbar for chip scrollers on mobile */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Balance scrollbar gutter on scrollable dialogs to avoid large right pad */
+.gutter-balanced { scrollbar-gutter: stable both-edges; }
+
+/* Short viewport tweaks: reduce paddings/gaps and title size on very short heights */
+@media (max-height: 700px) {
+  .vh-tight { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+  .vh-tight .hero-gap { gap: 0.75rem !important; }
+  .vh-tight .hero-title { font-size: 1.75rem !important; line-height: 1.2 !important; }
+  .vh-tight .cta-group { margin-top: 0.75rem !important; }
+}
+
+/* Hide hero photo on short viewports to avoid crowding */
+@media (max-height: 680px) {
+  .hero-photo { display: none !important; }
+}
+
+/* Auto-scrolling marquee for chip lists on mobile */
+.marquee { position: relative; overflow: hidden; width: 100%; }
+.marquee { --mask: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.marquee { -webkit-mask-image: var(--mask); mask-image: var(--mask); }
+.marquee-track { display: flex; width: max-content; animation: marquee var(--marquee-duration, 18s) linear infinite; }
+.marquee-group { display: flex; gap: 0.5rem; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } }
