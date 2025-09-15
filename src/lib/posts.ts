@@ -176,7 +176,7 @@ export function getPostBySlug(slug: string): { meta: PostMeta; html: string } | 
   const file = fs.readdirSync(BLOG_DIR).find((f) => slugify(path.parse(f).name) === slug);
   if (!file) return null;
   const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
-  const { data, content } = parseFrontMatter(raw);
+  const { content } = parseFrontMatter(raw);
   const metaList = getAllPostsMeta();
   const meta = metaList.find((m) => m.slug === slug);
   if (!meta) return null;
