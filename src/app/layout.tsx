@@ -7,8 +7,30 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Nabil Saragih",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  title: {
+    default: "Nabil Saragih",
+    template: "%s | Nabil Saragih",
+  },
   description: "AI & IoT Engineer",
+  keywords: ["AI", "IoT", "Edge AI", "Machine Learning", "Blog"],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Nabil Saragih",
+    title: "Nabil Saragih",
+    description: "AI & IoT Engineer",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nabil Saragih",
+    description: "AI & IoT Engineer",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 // Init tema SEBELUM hydration (anti flicker & mismatch)

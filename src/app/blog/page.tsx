@@ -4,6 +4,18 @@ import { getAllPostsMeta } from '@/lib/posts';
 export const metadata = {
   title: 'Blogs',
   description: 'Articles and notes',
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    type: 'website',
+    url: '/blog',
+    title: 'Blogs',
+    description: 'Articles and notes',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Blogs',
+    description: 'Articles and notes',
+  },
 };
 
 export default function BlogIndex() {
