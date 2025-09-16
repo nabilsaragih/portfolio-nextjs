@@ -16,18 +16,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post.meta.title,
     description: post.meta.excerpt,
+    keywords: post.meta.tags?.length
+      ? [...post.meta.tags, 'Muhammad Nabil Saragih', 'Nabil Saragih']
+      : ['Muhammad Nabil Saragih', 'Nabil Saragih', 'AI', 'IoT', 'Edge AI'],
+    authors: [{ name: 'Muhammad Nabil Saragih' }, { name: 'Nabil Saragih' }],
     alternates: { canonical: url },
     openGraph: {
       type: 'article',
       url,
-      title: post.meta.title,
+      siteName: 'Muhammad Nabil Saragih | Nabil Saragih',
+      title: `${post.meta.title} | Muhammad Nabil Saragih`,
       description: post.meta.excerpt,
       publishedTime: post.meta.date,
+      authors: ['Muhammad Nabil Saragih', 'Nabil Saragih'],
       tags: post.meta.tags,
     },
     twitter: {
       card: 'summary_large_image',
-      title: post.meta.title,
+      title: `${post.meta.title} | Muhammad Nabil Saragih`,
       description: post.meta.excerpt,
     },
   };
@@ -61,7 +67,24 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               headline: meta.title,
               datePublished: meta.date,
               dateModified: meta.date,
-              author: [{ '@type': 'Person', name: 'Nabil Saragih' }],
+              author: [
+                {
+                  '@type': 'Person',
+                  name: 'Muhammad Nabil Saragih',
+                  alternateName: 'Nabil Saragih',
+                  knowsAbout: ['AI Engineering', 'IoT Systems', 'Edge AI', 'Machine Learning'],
+                  sameAs: [
+                    'https://github.com/nabilsaragih',
+                    'https://www.linkedin.com/in/nabilsaragih/',
+                    'https://instagram.com/nabilsaragih._/',
+                  ],
+                },
+              ],
+              publisher: {
+                '@type': 'Person',
+                name: 'Muhammad Nabil Saragih',
+                alternateName: 'Nabil Saragih',
+              },
               keywords: meta.tags,
               description: meta.excerpt,
               mainEntityOfPage: {

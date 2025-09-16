@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import {
   ChevronDown, Github, Linkedin, Mail, ExternalLink, Award, Calendar,
-  User, Briefcase, FileText, Menu, Moon, Sun, Sparkles
+  User, Briefcase, FileText, Menu, Moon, Sun, Sparkles, Instagram
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMemo, useState, useEffect, useRef, type ReactNode } from 'react';
@@ -11,7 +11,7 @@ import profilePic from '../assets/profile.jpg';
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('home');
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  
   const navItems = useMemo(() => ([
     { id: 'home', label: 'Home', icon: User },
     { id: 'projects', label: 'Projects', icon: Briefcase },
@@ -167,7 +167,7 @@ export default function Portfolio() {
             <Icon className="h-5 w-5" />
             <span className={orientation === 'vertical' ? 'font-medium' : 'text-[11px] leading-none truncate max-w-[5rem]'}>{item.label}</span>
           </motion.button>
-        );
+      	);
       })}
     </div>
   );
@@ -203,15 +203,18 @@ export default function Portfolio() {
 
         <div className="flex items-center gap-2">
           <a href="https://github.com/nabilsaragih" target="_blank"
-             className="hidden sm:inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-3 hover:bg-gray-50 dark:hover:bg-gray-800">
-            <Github className="h-4 w-4" /><span className="text-sm">GitHub</span>
+             className="hidden sm:inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-5 hover:bg-gray-50 dark:hover:bg-gray-800">
+             <Github className="h-4 w-4" /><span className="text-sm">GitHub</span>
           </a>
           <a href="https://www.linkedin.com/in/nabilsaragih/" target="_blank"
-             className="hidden sm:inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-3 hover:bg-gray-50 dark:hover:bg-gray-800">
-            <Linkedin className="h-4 w-4" /><span className="text-sm">LinkedIn</span>
+             className="hidden sm:inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-5 hover:bg-gray-50 dark:hover:bg-gray-800">
+             <Linkedin className="h-4 w-4" /><span className="text-sm">LinkedIn</span>
+          </a>
+          <a href="https://instagram.com/nabilsaragih._/" target="_blank" rel="noopener noreferrer"
+             className="hidden sm:inline-flex h-11 items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-800 px-5 hover:bg-gray-50 dark:hover:bg-gray-800">
+            <Instagram className="h-4 w-4" /><span className="text-sm">Instagram</span>
           </a>
 
-          {/* TOMBOL THEME: render kedua ikon, sembunyikan via class → anti-hydration mismatch */}
           <motion.button
             {...springy}
             onClick={handleToggleTheme}
@@ -246,10 +249,11 @@ export default function Portfolio() {
           </div>
         </div>
         <NavButtons orientation="vertical" />
-        <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
-          <a href="mailto:mnabilsaragih@gmail.com" className="rounded-lg border border-gray-200 dark:border-gray-800 px-2 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800">Email</a>
-          <a href="https://github.com/nabilsaragih" target="_blank" className="rounded-lg border border-gray-200 dark:border-gray-800 px-2 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800">GitHub</a>
-          <a href="https://www.linkedin.com/in/nabilsaragih/" target="_blank" className="rounded-lg border border-gray-200 dark:border-gray-800 px-2 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800">LinkedIn</a>
+        <div className="mt-2 grid grid-cols-4 gap-1.5 text-[11px] leading-tight">
+          <a href="mailto:mnabilsaragih@gmail.com" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">Email</a>
+          <a href="https://github.com/nabilsaragih" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">GitHub</a>
+          <a href="https://www.linkedin.com/in/nabilsaragih/" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">LinkedIn</a>
+          <a href="https://instagram.com/nabilsaragih._" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">Instagram</a>
         </div>
       </div>
     </aside>

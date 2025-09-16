@@ -3,18 +3,30 @@ import { getAllPostsMeta } from '@/lib/posts';
 
 export const metadata = {
   title: 'Blogs',
-  description: 'Articles and notes',
+  description:
+    'AI & IoT engineering insights by Muhammad Nabil Saragih (Nabil Saragih), covering edge AI, machine learning, and smart connected systems.',
+  keywords: [
+    'Muhammad Nabil Saragih blog',
+    'Nabil Saragih blog',
+    'AI blog',
+    'IoT blog',
+    'Edge AI articles',
+    'Machine learning tutorials',
+  ],
+  authors: [{ name: 'Muhammad Nabil Saragih' }, { name: 'Nabil Saragih' }],
   alternates: { canonical: '/blog' },
   openGraph: {
     type: 'website',
     url: '/blog',
-    title: 'Blogs',
-    description: 'Articles and notes',
+    title: 'Blogs | Muhammad Nabil Saragih',
+    description:
+      'AI & IoT engineering insights by Muhammad Nabil Saragih (also known as Nabil Saragih), covering edge AI, machine learning, and smart connected systems.',
   },
   twitter: {
     card: 'summary',
-    title: 'Blogs',
-    description: 'Articles and notes',
+    title: 'Blogs by Muhammad Nabil Saragih',
+    description:
+      'AI & IoT engineering insights by Muhammad Nabil Saragih (Nabil Saragih), covering edge AI, machine learning, and smart connected systems.',
   },
 };
 
