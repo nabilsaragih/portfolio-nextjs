@@ -11,6 +11,7 @@ import profilePic from '../assets/profile.jpg';
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('home');
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const currentYear = new Date().getFullYear();
   
   const navItems = useMemo(() => ([
     { id: 'home', label: 'Home', icon: User },
@@ -150,6 +151,14 @@ export default function Portfolio() {
     <span className={`inline-flex items-center rounded-full border border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-white/5 backdrop-blur px-3 py-1 text-xs font-medium text-gray-700 dark:text-gray-200 ${className}`}>{children}</span>
   );
 
+  const NavFooter = ({ className = '' }: { className?: string }) => (
+    <div className={`flex items-center justify-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 ${className}`}>
+      <span>Built with</span>
+      <span role="img" aria-label="fire" className="text-sm">🔥</span>
+      <span>by Nabil © {currentYear}</span>
+    </div>
+  );
+
   const NavButtons = ({ orientation = 'vertical' }: {orientation?: 'vertical'|'horizontal'}) => (
     <div className={orientation === 'vertical' ? 'flex flex-col space-y-2' : 'grid grid-cols-4 w-full h-full'}>
       {navItems.map((item) => {
@@ -240,21 +249,24 @@ export default function Portfolio() {
 
   const Sidebar = () => (
     <aside className="hidden xl:fixed xl:inset-y-0 xl:flex xl:w-72 xl:flex-col xl:border-r xl:border-gray-200 dark:xl:border-gray-800 xl:bg-white/60 dark:xl:bg-neutral-950/60 xl:backdrop-blur xl:pt-[calc(var(--header-h)+var(--safe-top))]">
-      <div className="flex flex-col p-6 gap-6">
-        <div className="flex items-center gap-3">
-          <Image src={profilePic} alt="Profile" width={56} height={56} className="rounded-full border-[0.25px] border-white/25 shadow" />
-          <div>
-            <p className="font-semibold">Nabil Saragih</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">AI & IoT Engineer</p>
+      <div className="flex h-full flex-col p-6">
+        <div className="flex flex-1 flex-col gap-6">
+          <div className="flex items-center gap-3">
+            <Image src={profilePic} alt="Profile" width={56} height={56} className="rounded-full border-[0.25px] border-white/25 shadow" />
+            <div>
+              <p className="font-semibold">Nabil Saragih</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">AI & IoT Engineer</p>
+            </div>
+          </div>
+          <NavButtons orientation="vertical" />
+          <div className="mt-2 grid grid-cols-4 gap-1.5 text-[11px] leading-tight">
+            <a href="mailto:mnabilsaragih@gmail.com" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">Email</a>
+            <a href="https://github.com/nabilsaragih" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">GitHub</a>
+            <a href="https://www.linkedin.com/in/nabilsaragih/" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">LinkedIn</a>
+            <a href="https://instagram.com/nabilsaragih._" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">Instagram</a>
           </div>
         </div>
-        <NavButtons orientation="vertical" />
-        <div className="mt-2 grid grid-cols-4 gap-1.5 text-[11px] leading-tight">
-          <a href="mailto:mnabilsaragih@gmail.com" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">Email</a>
-          <a href="https://github.com/nabilsaragih" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">GitHub</a>
-          <a href="https://www.linkedin.com/in/nabilsaragih/" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">LinkedIn</a>
-          <a href="https://instagram.com/nabilsaragih._" target="_blank" className="inline-flex w-full min-w-0 items-center justify-center rounded-lg border border-gray-200 dark:border-gray-800 px-4 py-2 text-center hover:bg-gray-50 dark:hover:bg-gray-800 truncate">Instagram</a>
-        </div>
+        <NavFooter className="mt-6" />
       </div>
     </aside>
   );
@@ -265,7 +277,7 @@ export default function Portfolio() {
         <motion.div className="fixed inset-0 z-50 xl:hidden" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="absolute inset-0 bg-black/30" onClick={() => setDrawerOpen(false)} />
           <motion.div
-            className="absolute left-0 top-0 h-full w-80 max-w-[80%] bg-white dark:bg-neutral-950 border-r border-gray-200 dark:border-gray-800 p-6"
+            className="absolute left-0 top-0 h-full w-80 max-w-[80%] bg-white dark:bg-neutral-950 border-r border-gray-200 dark:border-gray-800 p-6 flex flex-col"
             initial={{ x: -300 }} animate={{ x: 0 }} exit={{ x: -300 }}
             transition={{ type: 'spring', stiffness: 260, damping: 30 }}>
             <div className="mb-6 flex items-center gap-3">
@@ -275,7 +287,10 @@ export default function Portfolio() {
                 <p className="text-sm text-gray-500 dark:text-gray-400">AI & IoT Engineer</p>
               </div>
             </div>
-            <NavButtons orientation="vertical" />
+            <div className="flex-1 overflow-y-auto">
+              <NavButtons orientation="vertical" />
+            </div>
+            <NavFooter className="mt-6" />
           </motion.div>
         </motion.div>
       )}
