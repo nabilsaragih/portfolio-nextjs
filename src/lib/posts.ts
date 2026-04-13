@@ -108,21 +108,66 @@ function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function wrapCodeToken(token: string, className: string): string {
+  return `<span class="${className}">${token}</span>`;
+}
+
+const PYTHON_KEYWORDS = new Set([
+  'from', 'import', 'def', 'return', 'class', 'if', 'elif', 'else', 'for', 'while', 'try', 'except',
+  'finally', 'with', 'as', 'pass', 'break', 'continue', 'in', 'is', 'not', 'and', 'or', 'lambda', 'yield',
+  'None', 'True', 'False',
+]);
+
+function highlightPython(code: string): string {
+  const safe = escapeHtml(code.trim());
+  const tokenRegex =
+    /(#.*$)|(@[A-Za-z_]\w*)|("""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(?:from|import|def|return|class|if|elif|else|for|while|try|except|finally|with|as|pass|break|continue|in|is|not|and|or|lambda|yield|None|True|False)\b|\b(?:print|len|range|sum|min|max|map|filter|list|dict|set|tuple|str|int|float|bool|enumerate|zip|open)\b|\b\d+(?:\.\d+)?\b/gm;
+
+  return safe.replace(tokenRegex, (match, comment, decorator, quoted) => {
+    if (comment) return wrapCodeToken(comment, 'code-comment');
+    if (decorator) return wrapCodeToken(decorator, 'code-decorator');
+    if (quoted) return wrapCodeToken(quoted, 'code-string');
+
+    if (/^\d/.test(match)) {
+      return wrapCodeToken(match, 'code-number');
+    }
+
+    if (PYTHON_KEYWORDS.has(match)) {
+      return wrapCodeToken(match, 'code-keyword');
+    }
+
+    return wrapCodeToken(match, 'code-builtin');
+  });
+}
+
+function highlightCode(code: string, language: string): string {
+  switch (language) {
+    case 'py':
+    case 'python':
+      return highlightPython(code);
+    default:
+      return escapeHtml(code.trim());
+  }
+}
+
 function markdownToHtml(md: string): string {
   // 1) Extract fenced code blocks into placeholders to avoid double-escaping
   const codeBlocks: string[] = [];
   // Support CRLF/LF and optional trailing newline before closing fence
   let text = md.replace(/```(\w+)?[ \t]*\r?\n([\s\S]*?)\r?\n?```/g, (_m, lang, code) => {
     const language = (lang ?? '').toString().toLowerCase();
-    const safe = escapeHtml(code.trim());
     // Treat plain text fences as callout instead of code block
     if (language === 'text' || language === 'plaintext' || language === 'txt') {
+      const safe = escapeHtml(code.trim());
       const html = `<blockquote><p>${safe.replace(/\n/g, '<br/>')}</p></blockquote>`;
       const i = codeBlocks.push(html) - 1;
       return `:::CODE_BLOCK_${i}:::`;
     }
+
+    const safe = highlightCode(code, language);
     const cls = language ? ` class="language-${language}"` : '';
-    const html = `<pre><code${cls}>${safe}</code></pre>`;
+    const dataLanguage = language ? ` data-language="${language}"` : '';
+    const html = `<pre${dataLanguage}><code${cls}>${safe}</code></pre>`;
     const i = codeBlocks.push(html) - 1;
     return `:::CODE_BLOCK_${i}:::`;
   });
