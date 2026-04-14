@@ -1,33 +1,30 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, CalendarDays, ChevronRight, Clock3, FileText } from 'lucide-react';
 import { getAllPostsMeta } from '@/lib/posts';
+import { absoluteUrl, defaultOgImage, siteConfig } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Blogs',
-  description:
-    'AI & IoT engineering insights by Muhammad Nabil Saragih (Nabil Saragih), covering edge AI, machine learning, and smart connected systems.',
-  keywords: [
-    'Muhammad Nabil Saragih blog',
-    'Nabil Saragih blog',
-    'AI blog',
-    'IoT blog',
-    'Edge AI articles',
-    'Machine learning tutorials',
-  ],
-  authors: [{ name: 'Muhammad Nabil Saragih' }, { name: 'Nabil Saragih' }],
-  alternates: { canonical: '/blog' },
+const blogDescription =
+  'Technical notes and essays by Nabil Saragih on AI, AIoT, robotics, edge systems, and applied engineering.';
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: blogDescription,
+  alternates: {
+    canonical: '/blog',
+  },
   openGraph: {
     type: 'website',
     url: '/blog',
-    title: 'Blogs | Muhammad Nabil Saragih',
-    description:
-      'AI & IoT engineering insights by Muhammad Nabil Saragih (also known as Nabil Saragih), covering edge AI, machine learning, and smart connected systems.',
+    title: `Blog | ${siteConfig.name}`,
+    description: blogDescription,
+    images: [defaultOgImage],
   },
   twitter: {
-    card: 'summary',
-    title: 'Blogs by Muhammad Nabil Saragih',
-    description:
-      'AI & IoT engineering insights by Muhammad Nabil Saragih (Nabil Saragih), covering edge AI, machine learning, and smart connected systems.',
+    card: 'summary_large_image',
+    title: `Blog | ${siteConfig.name}`,
+    description: blogDescription,
+    images: [defaultOgImage.url],
   },
 };
 
@@ -64,9 +61,35 @@ function renderExcerpt(excerpt: string) {
 
 export default function BlogIndex() {
   const posts = getAllPostsMeta();
+  const blogStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': absoluteUrl('/blog#blog'),
+    url: absoluteUrl('/blog'),
+    name: `${siteConfig.name} Blog`,
+    description: blogDescription,
+    author: {
+      '@type': 'Person',
+      '@id': absoluteUrl('/#person'),
+      name: siteConfig.name,
+      url: absoluteUrl('/'),
+    },
+    publisher: {
+      '@type': 'Person',
+      '@id': absoluteUrl('/#person'),
+      name: siteConfig.name,
+      url: absoluteUrl('/'),
+    },
+  };
 
   return (
     <div className="relative overflow-hidden pb-20 pt-[calc(var(--header-h)+1.25rem)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(blogStructuredData),
+        }}
+      />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(62,91,175,0.1),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.12),transparent_24%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(62,91,175,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.08),transparent_26%)]" />
 
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">

@@ -1,49 +1,56 @@
-import type { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { defaultOgImage, siteAuthor, siteConfig, siteStructuredData, siteUrl } from '@/lib/seo';
+import './globals.css';
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
+const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
+const siteStructuredDataJson = JSON.stringify(siteStructuredData);
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Nabil Saragih",
-    template: "%s | Nabil Saragih",
+    default: siteConfig.name,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    "Nabil Saragih is an AI & IoT Engineer specialising in edge AI, machine learning, and intelligent connected systems.",
-  keywords: [
-    "Muhammad Nabil Saragih",
-    "Nabil Saragih",
-    "AI engineer",
-    "IoT engineer",
-    "Edge AI",
-    "Machine Learning",
-    "AI & IoT portfolio",
-    "AI blog",
-    "IoT blog",
-  ],
-  authors: [{ name: "Muhammad Nabil Saragih" }, { name: "Nabil Saragih" }],
-  alternates: { canonical: "/" },
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  authors: [siteAuthor],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  referrer: 'origin-when-cross-origin',
+  category: 'technology',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    type: "website",
-    url: "/",
-    siteName: "Muhammad Nabil Saragih | Nabil Saragih",
-    title: "Muhammad Nabil Saragih (Nabil Saragih) | AI & IoT Engineer",
-    description:
-      "Portfolio and blog of Muhammad Nabil Saragih (also known as Nabil Saragih), an AI & IoT Engineer focused on edge AI, machine learning, and IoT systems.",
+    type: 'website',
+    siteName: siteConfig.name,
+    locale: siteConfig.locale,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [defaultOgImage],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Muhammad Nabil Saragih | Nabil Saragih",
-    description: "AI & IoT Engineer covering edge AI, machine learning, and smart IoT solutions.",
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [defaultOgImage.url],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
 };
 
@@ -71,6 +78,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <ThemeInit />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: siteStructuredDataJson,
+          }}
+        />
       </head>
       <body
         className={`

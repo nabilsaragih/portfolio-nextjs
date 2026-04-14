@@ -97,6 +97,7 @@ const SOCIAL_LINKS: SocialLink[] = [
 ];
 
 const ROLE_LABEL = 'AI Engineer | Independent Researcher | AIoT & Robotics R&D | Idea-Driven Innovator';
+const PROFILE_ROLE_LINES = ['AI Engineer', 'AIoT & Robotics'];
 const HERO_SKILLS = ['AI/ML', 'AIoT', 'Robotics', 'Computer Vision', 'Edge AI', 'LLM'];
 
 const PROJECTS: Project[] = [
@@ -232,6 +233,16 @@ function SectionHeading({
   );
 }
 
+function ProfileRoleBlock() {
+  return (
+    <div className="mt-1 text-[11px] leading-4 text-gray-500 dark:text-gray-400">
+      {PROFILE_ROLE_LINES.map((line) => (
+        <p key={line}>{line}</p>
+      ))}
+    </div>
+  );
+}
+
 function NavList({
   activeSection,
   onSectionChange,
@@ -294,7 +305,7 @@ function Header({
           </button>
 
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-navy-200/70 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.06]">
+            <span className="hidden h-10 w-10 items-center justify-center rounded-full border border-navy-200/70 bg-white shadow-sm dark:border-white/10 dark:bg-white/[0.06] sm:inline-flex">
               <Image
                 src="/favicon.ico"
                 alt="Nabil Saragih icon"
@@ -337,10 +348,12 @@ function Header({
           <button
             type="button"
             onClick={() => onSectionChange('projects')}
-            className={cn(primaryButtonClass, 'hidden sm:inline-flex')}
+            className={cn(primaryButtonClass, 'hidden h-12 gap-2.5 pl-4 pr-2 sm:inline-flex')}
           >
-            View Projects
-            <ArrowRight className="h-4 w-4" />
+            <span className="pl-1">View Projects</span>
+            <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/15">
+              <ArrowRight className="h-4 w-4" />
+            </span>
           </button>
         </div>
       </div>
@@ -371,15 +384,8 @@ function Sidebar({
                 className="h-12 w-12 rounded-2xl object-cover"
               />
               <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-gray-950 dark:text-white">
-                  Nabil Saragih
-                </p>
-                <p className="mt-1 text-[11px] leading-4 text-gray-500 dark:text-gray-400">
-                  AI Engineer
-                </p>
-                <p className="text-[11px] leading-4 text-gray-500 dark:text-gray-400">
-                  AIoT & Robotics
-                </p>
+                <p className="truncate text-sm font-semibold text-gray-950 dark:text-white">Nabil Saragih</p>
+                <ProfileRoleBlock />
               </div>
             </div>
           </div>
@@ -433,9 +439,9 @@ function MobileDrawer({
           >
             <div className={cn(surfaceClass, 'flex h-full flex-col p-5')}>
               <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1">
+                <div className="min-w-0">
                   <p className="text-sm font-semibold text-gray-950 dark:text-white">Nabil Saragih</p>
-                  <p className="text-[11px] leading-4 text-gray-500 dark:text-gray-400">{ROLE_LABEL}</p>
+                  <ProfileRoleBlock />
                 </div>
 
                 <button

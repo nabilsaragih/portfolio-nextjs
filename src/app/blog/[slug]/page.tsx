@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, CalendarDays, ChevronRight, Clock3, FileText } from 'lucide-react';
 import { BlogContent } from '@/components/blog-content';
 import { getAllPostsMeta, getPostBySlug, type PostMeta } from '@/lib/posts';
+import { absoluteUrl, getPostDescription, siteConfig } from '@/lib/seo';
 
 function formatLongDate(date: string) {
   const value = new Date(date);
@@ -28,39 +29,113 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getPostBySlug(slug);
 
   if (!post) {
-    return {};
+    return {
+      title: 'Article not found',
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
   }
 
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-  const url = `${site}/blog/${slug}`;
+  const postPath = `/blog/${post.meta.slug}`;
+  const postDescription = getPostDescription(post.meta.excerpt, post.meta.title);
+  const ogImageUrl = absoluteUrl(`${postPath}/opengraph-image`);
 
   return {
     title: post.meta.title,
-    description: post.meta.excerpt,
-    keywords: post.meta.tags?.length
-      ? [...post.meta.tags, 'Muhammad Nabil Saragih', 'Nabil Saragih']
-      : ['Muhammad Nabil Saragih', 'Nabil Saragih', 'AI', 'IoT', 'Edge AI'],
-    authors: [{ name: 'Muhammad Nabil Saragih' }, { name: 'Nabil Saragih' }],
-    alternates: { canonical: url },
+    description: postDescription,
+    alternates: {
+      canonical: postPath,
+    },
     openGraph: {
       type: 'article',
-      url,
-      siteName: 'Muhammad Nabil Saragih | Nabil Saragih',
-      title: `${post.meta.title} | Muhammad Nabil Saragih`,
-      description: post.meta.excerpt,
+      url: postPath,
+      title: post.meta.title,
+      description: postDescription,
       publishedTime: post.meta.date,
-      authors: ['Muhammad Nabil Saragih', 'Nabil Saragih'],
+      modifiedTime: post.meta.date,
+      authors: [siteConfig.name],
       tags: post.meta.tags,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.meta.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${post.meta.title} | Muhammad Nabil Saragih`,
-      description: post.meta.excerpt,
+      title: post.meta.title,
+      description: postDescription,
+      images: [ogImageUrl],
     },
   };
 }
 
 function BlogPostArticle({ html, meta }: { html: string; meta: PostMeta }) {
+  const postUrl = absoluteUrl(`/blog/${meta.slug}`);
+  const postDescription = getPostDescription(meta.excerpt, meta.title);
+  const postOgImageUrl = absoluteUrl(`/blog/${meta.slug}/opengraph-image`);
+  const articleStructuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        '@id': `${postUrl}#article`,
+        headline: meta.title,
+        description: postDescription,
+        datePublished: meta.date,
+        dateModified: meta.date,
+        image: [postOgImageUrl],
+        articleSection: 'Blog',
+        keywords: meta.tags.length ? meta.tags.join(', ') : undefined,
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': postUrl,
+        },
+        author: {
+          '@type': 'Person',
+          '@id': absoluteUrl('/#person'),
+          name: siteConfig.name,
+          url: absoluteUrl('/'),
+        },
+        publisher: {
+          '@type': 'Person',
+          '@id': absoluteUrl('/#person'),
+          name: siteConfig.name,
+          url: absoluteUrl('/'),
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${postUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: absoluteUrl('/'),
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Blog',
+            item: absoluteUrl('/blog'),
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: meta.title,
+            item: postUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="relative overflow-hidden pb-20 pt-[calc(var(--header-h)+1.25rem)]">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(62,91,175,0.1),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.12),transparent_24%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(62,91,175,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.08),transparent_26%)]" />
@@ -141,36 +216,7 @@ function BlogPostArticle({ html, meta }: { html: string; meta: PostMeta }) {
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'BlogPosting',
-                headline: meta.title,
-                datePublished: meta.date,
-                dateModified: meta.date,
-                author: [
-                  {
-                    '@type': 'Person',
-                    name: 'Muhammad Nabil Saragih',
-                    alternateName: 'Nabil Saragih',
-                    knowsAbout: ['AI Engineering', 'IoT Systems', 'Edge AI', 'Machine Learning'],
-                    sameAs: [
-                      'https://github.com/nabilsaragih',
-                      'https://www.linkedin.com/in/nabilsaragih/',
-                    ],
-                  },
-                ],
-                publisher: {
-                  '@type': 'Person',
-                  name: 'Muhammad Nabil Saragih',
-                  alternateName: 'Nabil Saragih',
-                },
-                keywords: meta.tags,
-                description: meta.excerpt,
-                mainEntityOfPage: {
-                  '@type': 'WebPage',
-                  '@id': `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/blog/${meta.slug}`,
-                },
-              }),
+              __html: JSON.stringify(articleStructuredData),
             }}
           />
 

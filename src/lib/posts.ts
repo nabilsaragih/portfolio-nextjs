@@ -87,7 +87,7 @@ function stripMarkdown(md: string): string {
     // images ![alt](url)
     .replace(/!\[[^\]]*\]\([^\)]*\)/g, ' ')
     // links [text](url)
-    .replace(/\[[^\]]*\]\([^\)]*\)/g, (m) => m.replace(/\[[^\]]*\]\([^\)]*\)/g, ''))
+    .replace(/\[([^\]]*)\]\([^\)]*\)/g, '$1')
     // headings and emphasis
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
@@ -102,6 +102,24 @@ function stripMarkdown(md: string): string {
 function estimateReadingTimeMinutes(text: string): number {
   const words = text.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 225));
+}
+
+function createExcerpt(text: string, maxLength = 160) {
+  const normalized = text.replace(/\s+/g, ' ').trim();
+
+  if (!normalized) {
+    return '';
+  }
+
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  const trimmed = normalized.slice(0, maxLength + 1);
+  const safeCutoff = trimmed.lastIndexOf(' ');
+  const excerpt = safeCutoff > Math.floor(maxLength * 0.6) ? trimmed.slice(0, safeCutoff) : normalized.slice(0, maxLength);
+
+  return `${excerpt.trim()}...`;
 }
 
 function escapeHtml(s: string): string {
@@ -198,33 +216,50 @@ function markdownToHtml(md: string): string {
   return html;
 }
 
-export function getAllPostsMeta(): PostMeta[] {
+type ParsedPost = {
+  content: string;
+  meta: PostMeta;
+};
+
+function parsePostFile(file: string): ParsedPost {
+  const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
+  const { data, content } = parseFrontMatter(raw);
+  const plain = stripMarkdown(content);
+  const title = typeof data.title === 'string' ? data.title.trim() : path.parse(file).name;
+  const date = typeof data.date === 'string' ? data.date : new Date().toISOString().slice(0, 10);
+  const excerpt =
+    typeof data.excerpt === 'string' && data.excerpt.trim() ? data.excerpt.trim() : createExcerpt(plain);
+  const tags = Array.isArray(data.tags) ? data.tags.map(String) : [];
+  const readingTimeMinutes = estimateReadingTimeMinutes(plain);
+  const slugSource = typeof data.slug === 'string' ? data.slug : path.parse(file).name;
+  const slug = slugify(slugSource);
+
+  return {
+    content,
+    meta: { slug, title, date, excerpt, tags, readingTimeMinutes },
+  };
+}
+
+function getAllParsedPosts(): ParsedPost[] {
   ensureBlogDir();
   const entries = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.md'));
-  const items: PostMeta[] = entries.map((file) => {
-    const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
-    const { data, content } = parseFrontMatter(raw);
-    const title: string = typeof data.title === 'string' ? data.title : path.parse(file).name;
-    const date: string = typeof data.date === 'string' ? data.date : new Date().toISOString().slice(0, 10);
-    const excerpt: string = typeof data.excerpt === 'string' ? data.excerpt : '';
-    const tags: string[] = Array.isArray(data.tags) ? data.tags.map(String) : [];
-    const plain = stripMarkdown(content);
-    const readingTimeMinutes = estimateReadingTimeMinutes(plain);
-    const slug = typeof data.slug === 'string' ? data.slug : slugify(path.parse(file).name);
-    return { slug, title, date, excerpt, tags, readingTimeMinutes };
-  });
-  return items.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return entries.map(parsePostFile).sort((a, b) => (a.meta.date < b.meta.date ? 1 : -1));
+}
+
+export function getAllPostsMeta(): PostMeta[] {
+  return getAllParsedPosts().map((post) => post.meta);
 }
 
 export function getPostBySlug(slug: string): { meta: PostMeta; html: string } | null {
-  ensureBlogDir();
-  const file = fs.readdirSync(BLOG_DIR).find((f) => slugify(path.parse(f).name) === slug);
-  if (!file) return null;
-  const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf8');
-  const { content } = parseFrontMatter(raw);
-  const metaList = getAllPostsMeta();
-  const meta = metaList.find((m) => m.slug === slug);
-  if (!meta) return null;
-  const html = markdownToHtml(content);
-  return { meta, html };
+  const normalizedSlug = slugify(slug);
+  const post = getAllParsedPosts().find((entry) => entry.meta.slug === normalizedSlug);
+
+  if (!post) {
+    return null;
+  }
+
+  return {
+    meta: post.meta,
+    html: markdownToHtml(post.content),
+  };
 }
