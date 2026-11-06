@@ -266,8 +266,8 @@ function SectionHeading({
   description: string;
 }) {
   return (
-    <div className="space-y-3 mb-10 border-b border-neutral-200/80 pb-6 dark:border-neutral-800/80">
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="space-y-3 mb-6 sm:mb-8 border-b border-neutral-200/80 pb-5 sm:pb-6 dark:border-neutral-800/80">
+      <div className="flex items-center gap-3">
         <span className="font-mono text-xs font-semibold text-navy-650 dark:text-navy-400">
           [{code}]
         </span>
@@ -741,16 +741,21 @@ function BlogsSection({
 }) {
   return (
     <section>
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-        <SectionHeading
-          code="INDEX_03"
-          eyebrow="TECHNICAL ARCHIVE"
-          title="Research Logs & Insights"
-          description="Technical writeups, architectural teardowns, and engineering notes on deploying intelligent algorithms to real machines."
-        />
+      <SectionHeading
+        code="INDEX_03"
+        eyebrow="TECHNICAL ARCHIVE"
+        title="Research Logs & Insights"
+        description="Technical writeups, architectural teardowns, and engineering notes on deploying intelligent algorithms to real machines."
+      />
+
+      {/* Action bar placed below the separating line with tight, clean spacing */}
+      <div className="mb-4 flex items-center justify-between">
+        <span className="text-xs font-mono text-neutral-500">
+          {blogPosts.length} {blogPosts.length === 1 ? 'Article' : 'Articles'}
+        </span>
         <Link
           href="/blog"
-          className={cn(secondaryBtnClass, 'shrink-0 self-start sm:self-auto text-xs h-9 mb-8 font-mono')}
+          className={cn(secondaryBtnClass, 'inline-flex items-center gap-1.5 h-8 px-3 text-xs font-mono')}
         >
           <span>All Logs ({blogPosts.length})</span>
           <ArrowUpRight className="h-3.5 w-3.5" />
