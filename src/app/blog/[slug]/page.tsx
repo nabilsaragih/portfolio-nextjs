@@ -137,82 +137,75 @@ function BlogPostArticle({ html, meta }: { html: string; meta: PostMeta }) {
   };
 
   return (
-    <div className="relative overflow-hidden pb-20 pt-[calc(var(--header-h)+1.25rem)]">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(62,91,175,0.1),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.12),transparent_24%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(62,91,175,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(148,163,184,0.08),transparent_26%)]" />
-
-      <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-wrap items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+    <div className="min-h-screen bg-white text-neutral-900 pb-20 pt-8 dark:bg-neutral-950 dark:text-neutral-100 transition-colors">
+      <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-wrap items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 rounded-full border border-gray-200/70 bg-white/80 px-4 py-2 text-gray-700 shadow-sm transition hover:bg-white dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-200 dark:hover:bg-white/[0.07]"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 font-medium text-neutral-700 transition hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900/60 dark:text-neutral-300 dark:hover:bg-neutral-800"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Home
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Home</span>
           </Link>
 
-          <ChevronRight className="h-4 w-4 text-gray-400 dark:text-gray-600" />
+          <ChevronRight className="h-3.5 w-3.5 text-neutral-400" />
 
-          <Link href="/blog" className="transition hover:text-navy-600 dark:hover:text-navy-300">
-            Blogs
+          <Link href="/blog" className="transition hover:text-navy-650 dark:hover:text-navy-300">
+            Blog
           </Link>
 
-          <ChevronRight className="h-4 w-4 text-gray-400 dark:text-gray-600" />
+          <ChevronRight className="h-3.5 w-3.5 text-neutral-400" />
 
-          <span className="truncate text-gray-400 dark:text-gray-500">{meta.title}</span>
+          <span className="truncate max-w-[200px] text-neutral-400">{meta.title}</span>
         </div>
 
-        <header className="relative overflow-hidden rounded-[32px] border border-gray-200/70 bg-white/88 px-6 py-7 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.35)] backdrop-blur-sm sm:px-8 sm:py-9 lg:px-10 dark:border-white/10 dark:bg-white/[0.04] dark:shadow-[0_32px_80px_-58px_rgba(0,0,0,0.9)]">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(62,91,175,0.14),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(148,163,184,0.12),transparent_24%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(62,91,175,0.18),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(148,163,184,0.08),transparent_24%)]" />
+        <header className="rounded-2xl border border-neutral-200/80 bg-neutral-50/50 p-6 sm:p-8 dark:border-neutral-800 dark:bg-neutral-900/40">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-navy-200/80 bg-navy-50/80 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy-700 dark:border-navy-500/20 dark:bg-navy-950/60 dark:text-navy-300">
+              <FileText className="h-3 w-3" />
+              Article
+            </span>
 
-          <div className="relative">
-            <div className="mb-5 flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-navy-200/80 bg-navy-50/90 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-navy-700 dark:border-navy-500/20 dark:bg-navy-500/10 dark:text-navy-200">
-                <FileText className="h-3.5 w-3.5" />
-                Journal
+            <div className="flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
+              <span className="inline-flex items-center gap-1">
+                <CalendarDays className="h-3.5 w-3.5 text-neutral-400" />
+                {formatLongDate(meta.date)}
               </span>
-
-              <div className="ml-auto flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                <span className="inline-flex items-center gap-2 rounded-full border border-gray-200/70 bg-white/80 px-3 py-1.5 dark:border-white/10 dark:bg-white/[0.04]">
-                  <CalendarDays className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                  {formatLongDate(meta.date)}
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-gray-200/70 bg-white/80 px-3 py-1.5 dark:border-white/10 dark:bg-white/[0.04]">
-                  <Clock3 className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                  {meta.readingTimeMinutes} min read
-                </span>
-              </div>
+              <span>·</span>
+              <span className="inline-flex items-center gap-1">
+                <Clock3 className="h-3.5 w-3.5 text-neutral-400" />
+                {meta.readingTimeMinutes} min read
+              </span>
             </div>
+          </div>
 
-            <div className="space-y-4">
-              <h1 className="max-w-4xl text-3xl font-semibold tracking-tight text-gray-950 sm:text-4xl lg:text-5xl dark:text-white">
-                {meta.title}
-              </h1>
+          <div className="space-y-3">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-neutral-950 dark:text-white leading-tight">
+              {meta.title}
+            </h1>
 
-              {meta.excerpt ? (
-                <p className="max-w-3xl text-base leading-8 text-gray-600 sm:text-lg dark:text-gray-300">
-                  {meta.excerpt}
-                </p>
-              ) : null}
-            </div>
-
-            {meta.tags?.length ? (
-              <div className="mt-6 flex flex-wrap gap-2.5">
-                {meta.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center rounded-full border border-gray-200/80 bg-white/85 px-3 py-1 text-xs font-medium text-gray-700 shadow-sm dark:border-white/10 dark:bg-white/[0.04] dark:text-gray-200"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            {meta.excerpt ? (
+              <p className="max-w-3xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+                {meta.excerpt}
+              </p>
             ) : null}
           </div>
+
+          {meta.tags?.length ? (
+            <div className="mt-5 flex flex-wrap gap-1.5 pt-4 border-t border-neutral-200/60 dark:border-neutral-800/60">
+              {meta.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-lg border border-neutral-200/90 bg-white px-2.5 py-0.5 text-[11px] font-medium text-neutral-600 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          ) : null}
         </header>
 
-        <article className="relative mt-8 overflow-hidden rounded-[32px] border border-gray-200/70 bg-white/92 px-6 py-7 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] backdrop-blur-sm sm:px-8 sm:py-8 lg:px-10 lg:py-10 dark:border-white/10 dark:bg-white/[0.035] dark:shadow-[0_28px_72px_-56px_rgba(0,0,0,0.92)]">
-          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy-300/80 to-transparent dark:via-navy-500/40" />
-
+        <article className="mt-8 rounded-2xl border border-neutral-200/80 bg-white p-6 sm:p-10 dark:border-neutral-800 dark:bg-neutral-900/50">
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -221,20 +214,18 @@ function BlogPostArticle({ html, meta }: { html: string; meta: PostMeta }) {
           />
 
           <div className="mx-auto max-w-3xl">
-            <div className="mb-8 flex flex-col gap-4 border-b border-gray-200/70 pb-6 sm:flex-row sm:items-center sm:justify-between dark:border-white/10">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400">
-                  Written by
-                </p>
-                <p className="mt-1 text-sm font-semibold text-gray-950 dark:text-white">Nabil Saragih</p>
+            <div className="mb-8 flex items-center justify-between border-b border-neutral-200/80 pb-4 dark:border-neutral-800">
+              <div className="flex items-center gap-2 text-xs">
+                <span className="text-neutral-500">Author:</span>
+                <span className="font-semibold text-neutral-900 dark:text-white">Nabil Saragih</span>
               </div>
 
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 text-sm font-medium text-navy-600 transition hover:text-navy-800 dark:text-navy-300 dark:hover:text-navy-200"
+                className="inline-flex items-center gap-1 text-xs font-medium text-navy-650 hover:text-navy-800 dark:text-navy-400 dark:hover:text-navy-300"
               >
-                Browse more posts
-                <ChevronRight className="h-4 w-4" />
+                <span>Back to All Articles</span>
+                <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 

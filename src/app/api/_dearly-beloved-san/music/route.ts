@@ -3,12 +3,12 @@ import fs from 'fs';
 import path from 'path';
 
 export async function GET(request: NextRequest) {
-  // Path to the asset file in src/app/dearly-beloved-san/assets
+  // Path to the asset file in src/app/_dearly-beloved-san/assets
   const filePath = path.join(
     process.cwd(),
     'src',
     'app',
-    'dearly-beloved-san',
+    '_dearly-beloved-san',
     'assets',
     'Nadhif Basalamah - kota ini tak sama tanpamu.mp3'
   );
